@@ -33,6 +33,30 @@ func LCM(args ...int64) int64 {
 	return lcm
 }
 
+// GetCommonInterval returns minStart, maxStop and LCM(steps) for slice of metrics.
+// minStart will be set to closest greater or equal multiple of LCM(steps).
+// maxStop will be set to closest lower or equalmultiple of LCM(steps).
+func GetCommonInterval(args []*types.MetricData) (minStart, maxStop, commonStep int64) {
+	minStart = args[0].StartTime
+	maxStop = args[0].StopTime
+	steps := make([]int64, 0)
+	for _, arg := range args {
+		if arg.StartTime < minStart {
+			minStart = arg.StartTime
+		}
+		if maxStop < arg.StopTime {
+			maxStop = arg.StopTime
+		}
+		steps = append(steps, arg.StepTime)
+	}
+	commonStep = LCM(steps...)
+	// Closest greater or equal multiple of commonStep
+	minStart = ((minStart + commonStep - 1) / commonStep) * commonStep
+	// Closest lower or equal multiple of commonStep
+	maxStop = maxStop - (maxStop % commonStep)
+	return minStart, maxStop, commonStep
+}
+
 // GetBuckets returns amount buckets for timeSeries (defined with startTime, stopTime and step (bucket) size.
 func GetBuckets(start, stop, bucketSize int64) int64 {
 	return int64(math.Ceil(float64(stop-start) / float64(bucketSize)))
