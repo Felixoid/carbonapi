@@ -136,8 +136,7 @@ func AlignSeries(args []*types.MetricData) []*types.MetricData {
 			if minStart < arg.StartTime {
 				valCnt := (arg.StartTime - minStart) / arg.StepTime
 				newVals := genNaNs(int(valCnt))
-				newVals = append(newVals, arg.Values...)
-				arg.Values = newVals
+				arg.Values = append(newVals, arg.Values...)
 				arg.StartTime = minStart
 			}
 
