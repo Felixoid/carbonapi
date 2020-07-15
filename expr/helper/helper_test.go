@@ -121,7 +121,7 @@ func TestGetCommonInterval(t *testing.T) {
 				types.MakeMetricData("metric2", make([]float64, 30), 2, 4), // 4..64
 				types.MakeMetricData("metric2", make([]float64, 25), 3, 6), // 6..81
 			},
-			30,
+			0,
 			60,
 			30,
 		},

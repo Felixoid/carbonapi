@@ -34,8 +34,7 @@ func LCM(args ...int64) int64 {
 }
 
 // GetCommonInterval returns minStart, maxStop and LCM(steps) for slice of metrics.
-// minStart will be set to closest greater or equal multiple of LCM(steps).
-// maxStop will be set to closest lower or equalmultiple of LCM(steps).
+// minStart and maxStop will be set to closest lower or equal multiple of LCM(steps).
 func GetCommonInterval(args []*types.MetricData) (minStart, maxStop, commonStep int64) {
 	minStart = args[0].StartTime
 	maxStop = args[0].StopTime
@@ -51,7 +50,7 @@ func GetCommonInterval(args []*types.MetricData) (minStart, maxStop, commonStep 
 	}
 	commonStep = LCM(steps...)
 	// Closest greater or equal multiple of commonStep
-	minStart = ((minStart + commonStep - 1) / commonStep) * commonStep
+	minStart = minStart - (minStart % commonStep)
 	// Closest lower or equal multiple of commonStep
 	maxStop = maxStop - (maxStop % commonStep)
 	return minStart, maxStop, commonStep
