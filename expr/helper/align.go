@@ -49,9 +49,8 @@ func GetCommonInterval(args []*types.MetricData) (minStart, maxStop, commonStep 
 		steps = append(steps, arg.StepTime)
 	}
 	commonStep = LCM(steps...)
-	// Closest greater or equal multiple of commonStep
-	minStart = minStart - (minStart % commonStep)
 	// Closest lower or equal multiple of commonStep
+	minStart = minStart - (minStart % commonStep)
 	maxStop = maxStop - (maxStop % commonStep)
 	return minStart, maxStop, commonStep
 }
