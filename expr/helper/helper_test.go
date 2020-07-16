@@ -155,3 +155,25 @@ func TestGetCommonInterval(t *testing.T) {
 		}
 	}
 }
+
+func TestScaleToCommonInterval(t *testing.T) {
+	tests := []struct {
+		metrics []*types.MetricData
+		result  []*types.MetricData
+	}{
+		{
+			[]*types.MetricData{
+				types.MakeMetricData("metric1", []float64{1, 3, 5, 7, 9, 11, 13, 15, 17}, 1, 4), // 5..80
+				types.MakeMetricData("metric2", []float64{1, 2, 3, 4, 5}, 2, 4),                 // 4..64
+				types.MakeMetricData("metric2", []float64{1, 2, 3, 4}, 3, 3),                    // 6..81
+			},
+			[]*types.MetricData{},
+		},
+	}
+	for _, tt := range tests {
+		result := ScaleToCommonInterval(tt.metrics)
+		if len(result) != len(tt.result) {
+			t.Errorf("Result has different length %v than expected %v", len(result), len(tt.result))
+		}
+	}
+}
