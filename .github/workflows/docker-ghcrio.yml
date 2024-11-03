@@ -16,11 +16,12 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.ref || '' }}
+          ref: ${{ inputs.ref && inputs.ref || '' }}
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
         with:
+          context: ${{ inputs.ref && 'git' || 'workflow' }}
           images: ghcr.io/${{ github.repository }}
           # create latest tag for branch events
           flavor: |
