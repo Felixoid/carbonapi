@@ -32,6 +32,12 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}.{{minor}}.{{patch}}
+      - name: Debug
+        run: |
+          cat << 'JSON'
+          ${{ toJSON(steps.meta.outputs) }}
+          JSON
+          exit 1
       - name: Login to ghcr.io
         uses: docker/login-action@v3
         with:
